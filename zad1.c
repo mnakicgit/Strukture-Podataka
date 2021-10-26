@@ -88,10 +88,10 @@ int main() {
     int max = 0;
     int* aps_br = 0, rel_br = 0;
 
-    br_red = br_redaka("naziv_dat.txt");
+    br_red = br_redaka("studenti.txt");
     printf("Broj redaka tj. studenata u datoteci: %d", br_red);
 
-    student* studenti = alloc_stud_proc(br_red, "naziv_dat.txt");
+    student* studenti = alloc_stud_proc(br_red, "studenti.txt");
 
     max = max_bod(br_red, studenti);
 
