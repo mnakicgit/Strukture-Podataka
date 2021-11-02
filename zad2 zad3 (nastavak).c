@@ -23,6 +23,10 @@ int AppendList(Position head, char* name, char* surname, int birthYear); //dodav
 Position FindPerson(Position first , char * surname);
 Position FindBefore(Position position, char* surname);
 int DeleteAfter(char* surname, Position head);
+int InsertPersonAfter(Position head, Position newPerson, char* surname);
+int InsertPersonBefore(Position head, Position newPerson, char* surname);
+int InsertSort(Position head, Position newPerson); //sortirani unos
+int SaveToFile(char* naziv_dat, Position first);
 
 int main(int argc, char** argv) //argument count, argument variables(niz nizova tj matrica tj niz stringova)
 {
@@ -36,9 +40,9 @@ int main(int argc, char** argv) //argument count, argument variables(niz nizova 
 
 	printf("Vezana lista osoba je prazna.\n");
 
-	while(odabir != 6)
+	while(odabir != 0)
 	{
-		printf("\nOdaberi:\n 1 Dodaj osobu na pocetak\n 2 Dodaj osobu na kraj\n 3 Izbrisi osobu iz liste\n 4 Pronadi osobu\n 5 Isprintaj listu\n 6 Izadi iz programa\n\nUpisi broj:");
+		printf("\nOdaberi:\n 1 Dodaj osobu na pocetak\n 2 Dodaj osobu na kraj\n 3 Izbrisi osobu iz liste\n 4 Pronadi osobu\n 5 Isprintaj listu\n 6 Unesi iza osobe\n 7 Unesi ispred osobe\n 8 Upisi listu u datoteku\n 9 Procitaj listu iz datoteke\n 0 Izadi iz programa\n\nUpisi broj:");
 		scanf(" %d",&odabir);
 
 		switch(odabir)
@@ -67,7 +71,11 @@ int main(int argc, char** argv) //argument count, argument variables(niz nizova 
 			case 5:
 				PrintList(p);
 				break;
-			case 6:
+            case 6:
+                printf("Unesi ime, prezime i godinu rodenja: ");
+				scanf("%s %s %d", &ime, &prezime, &god);
+				InsertPersonAfter(p, )
+			case 0:
 				printf("Kraj programa");
 				break;
 			default:
@@ -225,4 +233,53 @@ int DeleteAfter(char* surname, Position head) {
 	}
 
 	return EXIT_SUCCESS;
+}
+
+int InsertPersonAfter(Position head, Position newPerson, char* surname)
+{
+    Position InsertingAfter = FindPerson(head, surname);
+
+    InsertAfter(InsertingAfter, newPerson);
+
+    return EXIT_SUCCESS;
+}
+
+int InsertPersonBefore(Position head, Position newPerson, char* surname)
+{
+    Position InsertingBefore = FindPerson(head, surname);
+    Position before = FindBefore(head, surname);
+
+    InsertAfter(before, newPerson);
+}
+
+int InsertSort(Position head, Position newPerson) //sortirani unos
+{
+    Position position = head;
+
+    while (p->next != NULL && strcmp(p->next->surname, newPerson->surname) < 0)
+        position = position->next;
+
+    InsertAfter(position, newPerson);
+
+    return EXIT_SUCCESS;
+}
+
+int SaveToFile(char* naziv_dat, Position first)
+{
+    Position position = first;
+
+    FILE* f = NULL;
+    f = fopen(naziv_dat, "w");
+
+    if(f == NULL)
+    {
+        printf("Greska pri upisu!");
+        return EXIT_FAILURE;
+    }
+
+    for(position = first->next; position != NULL; position = position->next)
+        fprintf(f, "%s %s %d\n", position->name, position->surname, position->birthYear);
+
+    fclose(f);
+    return EXIT_SUCCESS;
 }
