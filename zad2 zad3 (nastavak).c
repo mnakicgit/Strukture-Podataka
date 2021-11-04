@@ -27,13 +27,14 @@ int InsertPersonBefore(Position head, char* name, char* surname, int birthYear, 
 int InsertPersonAfter(Position head, char* name, char* surname, int birthYear, char* surname2);
 int InsertSort(Position head, char* name, char* surname, int birthYear); //sortirani unos
 int SaveToFile(char* naziv_dat, Position first);
+int ReadFile(char* naziv_dat, Position head);
 
 int main(int argc, char** argv) //argument count, argument variables(niz nizova tj matrica tj niz stringova)
 {
 	Person head = {.next = NULL, .name = {0}, .surname = {0}, .birthYear = 0};
 	Position p = &head;
 
-	int odabir = 0;
+	int odabir = -1;
 	char ime[MAX_SIZE] = {0};
 	char prezime[MAX_SIZE] = {0};
 	char prezime2[MAX_SIZE] = {0};
@@ -43,7 +44,7 @@ int main(int argc, char** argv) //argument count, argument variables(niz nizova 
 
 	while(odabir != 0)
 	{
-		printf("\nOdaberi:\n 1 Dodaj osobu na pocetak\n 2 Dodaj osobu na kraj\n 3 Izbrisi osobu iz liste\n 4 Pronadi osobu\n 5 Isprintaj listu\n 6 Unesi iza osobe\n 7 Unesi ispred osobe\n 8 Upisi listu u datoteku\n 9 Procitaj listu iz datoteke\n 0 Izadi iz programa\n\nUpisi broj:");
+		printf("\nOdaberi:\n 1 Dodaj osobu na pocetak\n 2 Dodaj osobu na kraj\n 3 Izbrisi osobu iz liste\n 4 Pronadi osobu\n 5 Isprintaj listu\n 6 Unesi iza osobe\n 7 Unesi ispred osobe\n 8 Upisi listu u datoteku\n 9 Procitaj podatke iz datoteke i spremi u listu\n 0 Izadi iz programa\n\nUpisi broj:");
 		scanf(" %d",&odabir);
 
 		switch(odabir)
@@ -86,6 +87,9 @@ int main(int argc, char** argv) //argument count, argument variables(niz nizova 
 				break;
             case 8:
                 SaveToFile("zad3 upisana lista.txt", p);
+                break;
+            case 9:
+                ReadFile("zad3 upisana lista.txt", p);
                 break;
 			case 0:
 				printf("Kraj programa");
@@ -187,6 +191,7 @@ int AppendList(Position head, char* name, char* surname, int birthYear) //dodava
 	last = FindLast(head);
 	InsertAfter(last, newPerson);
 
+    return EXIT_SUCCESS;
 }
 
 Position FindPerson(Position first , char* surname)
@@ -262,6 +267,8 @@ int InsertPersonBefore(Position head, char* name, char* surname, int birthYear, 
     Position before = FindBefore(head, surname2);
 
     AppendList(before, name, surname, birthYear);
+
+    return EXIT_SUCCESS;
 }
 
 int InsertSort(Position head, char* name, char* surname, int birthYear) //sortirani unos
@@ -293,6 +300,32 @@ int SaveToFile(char* naziv_dat, Position first)
         fprintf(f, "%s %s %d\n", position->name, position->surname, position->birthYear);
 
     printf("Spremljeno u datoteku.\n");
+    fclose(f);
+    return EXIT_SUCCESS;
+}
+
+int ReadFile(char* naziv_dat, Position head)
+{
+    char name[MAX_SIZE] = {0};
+    char surname[MAX_SIZE] = {0};
+    int birthYear = 0;
+    char buffer[MAX_SIZE] = {0};
+    FILE* f = NULL;
+
+    f = fopen(naziv_dat, "r");
+    if(f == NULL)
+    {
+        printf("Greska pri otvaranju datoteke\n");
+        return EXIT_FAILURE;
+    }
+
+    while(!feof(f))
+    {
+        fgets(buffer, MAX_SIZE, f);     //cita cijelu liniju i sprema u buffer
+        sscanf(buffer, " %s %s %d", &name, &surname, &birthYear);   //cita elemente iz buffera
+        PrependList(head, name, surname, birthYear);
+    }
+
     fclose(f);
     return EXIT_SUCCESS;
 }
