@@ -20,9 +20,13 @@ typedef struct _Element
 int ProcitajDat(char* naziv_dat, Position head1, Position head2);
 int SortiraniUnos(Position head, int koef, int eksp);
 int IspisiPol(Position head);
+int SrediListu(Position head);
 int OslobodiListu(Position head);
+int IzbrisiElementIza(Position before);
 
-//umisto MergeAfter dodaj SrediListu, nakon sortiranog unosa svih elemenata sreduje polinom
+//ili umisto MergeAfter dodaj SrediListu, nakon sortiranog unosa svih elemenata sreduje polinom
+
+//MergeAfter mi se cini bolji ali idem probat na svoj nacin
 
 //MergeAfter (position position, newElement) - ako vec ne postoji, dodaj novi
 //... if rezultantni koes == 0, deleteafter, free, else ako je isti, zbroji ih, free newElement
@@ -36,17 +40,19 @@ int main()
     Element headZ = {.next = NULL, .koef = 0, .eksp = 0};
     Element headU = {.next = NULL, .koef = 0, .eksp = 0};
 
+    ProcitajDat("polinomi.txt", &headP1, &headP2);
+
     //poziv zbrajanja i mnozenja
 
     printf("Ucitani polinomi:\n");
-    IspisiPol(&headP1);
-    IspisiPol(&headP2);
+    IspisiPol(&headP1.next);
+    IspisiPol(&headP2.next);
 
     printf("Zbroj polinoma: ");
-    IspisiPol(&headZ);
+    IspisiPol(&headZ.next);
 
     printf("Umnozak polinoma: ");
-    IspisiPol(&headU);
+    IspisiPol(&headU.next);
 
     //OslobodiListu() ...
 
@@ -79,7 +85,7 @@ int SpremiProcitanoUListu(Position head, char* buffer) //char* ?
 {
     char currentBuffer = buffer;
     int koef = 0, eksp = 0, n = 0;
-    Position newElement = NULL;
+    //Position newElement = NULL;
 
     while(strlen(currentBuffer) > 0)
     {
@@ -116,8 +122,51 @@ int SortiraniUnos(Position head, int koef, int eksp)
     return EXIT_SUCCESS;
 }
 
-int IspisiPol(Position head) //oblik 123 x^(1) + 222 x^(2) + ...
+int SrediListu(Position head)
 {
+    Position p = head->next;
+    Position before = head;
+
+    while(p != NULL)
+    {
+        while(p->eksp == p->next->eksp)
+        {
+            p->koef += p->next->koef;
+            IzbrisiElementIza(head, p);
+        }
+
+        if(p->koef == 0)
+            IzbrisiElementIza(head, before); //ili funkcijama IzbrisiEl() i FindEl ili FindBefore
+        p = p->next;
+        before = before->next;
+    }
+
+
+    return EXIT_SUCCESS;
+}
+
+int IspisiPol(Position first) //oblik 123 x^(1) + 222 x^(2) + ...
+{
+    Position p = first;
+
+    while(p != NULL)
+    {
+        if (p->next == NULL)
+            printf("%d x^(%d)\n", p->koef, p->eksp);
+        else
+            printf("%d x^(%d) + ", p->koef, p->eksp);
+        p = p->next;
+    }
+
+    return EXIT_SUCCESS;
+}
+
+int IzbrisiElementIza(Position before)
+{
+    Position toDelete = before->next;
+
+    before->next = toDelete->next;
+    free(toDelete);
 
     return EXIT_SUCCESS;
 }
