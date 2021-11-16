@@ -93,9 +93,8 @@ int ProcitajDat(char* naziv_dat, Position head1, Position head2)
 
 int SpremiProcitanoUListu(Position head, char* buffer) //char* ?
 {
-    char currentBuffer = buffer;
+    char* currentBuffer = buffer;
     int koef = 0, eksp = 0, n = 0;
-    //Position newElement = NULL;
 
     while(strlen(currentBuffer) > 0)
     {
