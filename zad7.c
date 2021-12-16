@@ -1,13 +1,28 @@
 #include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    printf("Hello world!\n");
+    return 0;
+}
+#include <stdio.h>
 #include <string.h>
 
-typedef struct CvorStabla* Position;
-struct CvorStabla 
+typedef struct stablo* Position;
+typedef struct stablo
 {
-    int name;
+    char name[100];
     Position sibling;
     Position child;
-};
+} Stablo;
+
+typedef struct stog* PositionStog;
+typedef struct stog
+{
+    Position el;
+    PositionStog next;
+} Stog;
 
 Position Insert(Position current, Position q);  //md
 Position PrintChildren(Position parent);    //dir (ls u Linux Terminalu i Powershellu)
@@ -30,11 +45,11 @@ Position Insert(Position current, Position q)
     {
         current->sibling = Insert(current->sibling, q);     //rekurzija!
     }
-    else 
+    else
     {
         printf("A directory or file with that name already exists.\n");
         free(q);
-        return current; 
+        return current;
     }
 }
 
@@ -42,3 +57,29 @@ Position PrintChildren(Position parent)
 {
     Position P = parent->child; //first
 }
+
+int Push(Position current, PositionStog HeadStog)
+{
+    PositionStog newEL = NULL;
+    PositionStog temp = HeadStog;
+
+    newEl = (PositioStog)malloc(sizeof(Stog));
+    if(newEl == NULL))
+    {
+        printf("Greska pri alokaciji, neuspjesan push na stog");
+        return 1;
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
