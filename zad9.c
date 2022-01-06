@@ -9,9 +9,9 @@ struct cvor
     Pozicija right;
 };
 
-Pozicija Insert(int broj, Pozicija root);
-Pozicija Alociraj(int broj);
-int Replace(Pozicija root);
+Pozicija Insert(int, Pozicija);
+Pozicija Alociraj(int);
+int Replace(Pozicija);
 
 int main()
 {
@@ -61,8 +61,26 @@ Pozicija Alociraj(int broj)
     return noviCvor;
 }
 
-int Replace(Pozicija root)
+int Replace(Pozicija root) //uufffffffffffweghilawguo
 {
+
+    return 0;
+}
+
+int OtvoriDatPozoviSpremanje(Pozicija root, char* imeDat) //??
+{
+    FILE* dat = NULL;
+	dat = fopen(imeDat, "w");
+
+    if(dat != NULL) 
+    {
+        SpremiInorder 
+    }
+    else
+    {
+        printf("Greska pri otvaranju datoteke.\n");
+        return 1;
+    }
 
     return 0;
 }
