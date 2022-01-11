@@ -10,7 +10,7 @@ typedef struct _cvor
     Position right;
 }cvor;
 
-Position Insert(Position p, int broj);
+Position Insert(Position root, Position noviEl);
 Position CreateElement(int broj);
 int InorderIspis(Position root);
 int PreorderIspis(Position root);
@@ -36,7 +36,7 @@ int main()
 			case 1:
 				printf("Upisi broj koji zelis ubaciti:\n");
                 scanf("%d", &el);
-                root = Insert(root, el);
+                root = Insert(root, CreateElement(el));
 				break;
 			case 2:
                 printf("Elementi stabla inorder:\n");
@@ -58,7 +58,10 @@ int main()
             case 6:
                 printf("Upisi broj koji zelis pronaci:\n");
                 scanf("%d", &el);
-                FindEl(root, el);
+                if(FindEl(root, el))
+                    printf("Broj se nalazi u stablu.\n");
+                else
+                    printf("Broj se NE nalazi u stablu.\n");
                 break;
 			case 0:
 				printf("Kraj programa");
@@ -72,28 +75,24 @@ int main()
     return 0;
 }
 
-Position Insert(Position p, int broj)
+Position Insert(Position root, Position noviEl)
 {
-    Position noviEl = CreateElement(noviEl);
-
-    if(p == NULL)
+    if(root == NULL)
         return noviEl;
 
-    else if(p->data < noviEl->data)
-        p->right = Insert(p->right,noviEl);
+    else if(root->data < noviEl->data)
+        root->right = Insert(root->right,noviEl);
 
-    else if(p->data > noviEl->data)
-        p->left = Insert(p->left,noviEl);
+    else if(root->data > noviEl->data)
+        root->left = Insert(root->left,noviEl);
 
     else
     {
         free(noviEl);
-        return p;
+        return root;
     }
 
-    return p;
-
-    return NULL;
+    return root;
 }
 
 Position CreateElement(int broj)
@@ -115,35 +114,92 @@ Position CreateElement(int broj)
 	return newElement;
 }
 
-int InorderIspis(Position root)
+int InorderIspis(Position root) //samo mijenjas di je printf
 {
-    printf("\n");
     if (root)
 	{
 		InorderIspis(root->left);
 		printf("%d ", root->data);
 		InorderIspis(root->right);
 	}
-
     return 0;
 }
 
 int PreorderIspis(Position root)
 {
+    if (root)
+	{
+	    printf("%d ", root->data);
+		InorderIspis(root->left);
+		InorderIspis(root->right);
+	}
     return 0;
 }
 
 int PostorderIspis(Position root)
 {
+    if (root)
+	{
+		InorderIspis(root->left);
+		InorderIspis(root->right);
+		printf("%d ", root->data);
+	}
     return 0;
 }
 
 Position DeleteEl(Position root, int toDelete)
 {
-    return NULL;
+    Position temp = NULL;
+
+    if(!root)
+        return root;
+
+    if(root->data == toDelete)
+    {
+        if(root->left)
+        {
+            temp = root->left;
+            while(temp->right)
+            {
+                temp = temp->right;
+            }
+            temp->left = root->left;
+            temp->right = root->right;
+        }
+        else if(root->right)
+        {
+            temp = root->right;
+            while(temp->left)
+            {
+                temp = temp->left;
+            }
+            temp->left = root->left;
+            temp->right = root->right;
+        }
+        root->right = NULL;
+        root->left = NULL;
+        free(root);
+        printf("Element je izbrisan.\n");
+        return temp;
+    }
+    if(root->data < toDelete)
+        root->right = DeleteEl(root->right, toDelete);
+    else
+        root->left = DeleteEl(root->left, toDelete);
+
+
 }
 
 int FindEl(Position root, int toFind)
 {
-    return 0;
+    if(!root)
+        return 0;
+    if(root->data == toFind)
+        return toFind;
+    else if(root->data < toFind)
+        return FindEl(root->right, toFind);
+    else if(root->data > toFind)
+        return FindEl(root->left, toFind);
+    else
+        return 0;
 }
