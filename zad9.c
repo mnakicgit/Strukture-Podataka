@@ -74,7 +74,7 @@ int OtvoriDatPozoviSpremanje(Pozicija root, char* imeDat) //??
 
     if(dat != NULL) 
     {
-        SpremiInorder 
+        //SpremiInorder 
     }
     else
     {
