@@ -61,10 +61,16 @@ Pozicija Alociraj(int broj)
     return noviCvor;
 }
 
-int Replace(Pozicija root) //uufffffffffffweghilawguo
+int Replace(Pozicija current) //princip?
 {
+    if(!current)
+        return 0;
 
-    return 0;
+    int oldData = current->data;
+
+    current->data = Replace(current->left) + Replace(current->right);
+
+    return current->data + oldData;
 }
 
 int OtvoriDatPozoviSpremanje(Pozicija root, char* imeDat) //??

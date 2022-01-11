@@ -1,0 +1,2 @@
+New York 10000000
+Los Angeles 5000000
